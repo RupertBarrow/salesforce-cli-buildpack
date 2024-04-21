@@ -33,6 +33,8 @@ install_sfdx_cli() {
   mkdir -p "$BUILD_DIR/vendor/sfdx"
   cp -r sfdx "$BUILD_DIR/vendor/sfdx/cli"
   chmod -R 755  "$BUILD_DIR/vendor/sfdx/cli"
+
+  sf version --verbose
 }
 
 install_jq() {

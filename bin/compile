@@ -23,6 +23,10 @@ source $BP_DIR/lib/stdlib.sh
 
 ### Setup functions
 
+update_npm() {
+  npm -nstall -g npm@10.5.2
+}
+
 install_sfdx_cli() {
   log "Downloading Salesforce CLI tarball ..."
   mkdir sfdx && curl --silent --location "https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz" | tar xJ -C sfdx --strip-components 1
@@ -43,6 +47,8 @@ install_jq() {
   cd "$BUILD_DIR/vendor/sfdx/jq"
   wget --quiet -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
   chmod +x jq
+
+jq --version
 }
 
 setup_dirs() {
@@ -62,6 +68,9 @@ debug "ENV_DIR: $ENV_DIR"
 debug "BP_DIR: $BP_DIR"
 
 setup_dirs
+
+update_npm
+
 log "Starting CLI installation ..."
 install_sfdx_cli
 

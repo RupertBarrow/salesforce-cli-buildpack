@@ -24,7 +24,7 @@ source $BP_DIR/lib/stdlib.sh
 ### Setup functions
 
 update_npm() {
-  npm -nstall -g npm@10.5.2
+  npm install -g npm@10.5.2
 }
 
 install_sfdx_cli() {

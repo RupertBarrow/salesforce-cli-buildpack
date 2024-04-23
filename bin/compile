@@ -33,14 +33,18 @@ install_sfdx_cli() {
   mkdir -p "$BUILD_DIR/vendor/sfdx"
   cp -r sfdx "$BUILD_DIR/vendor/sfdx/cli"
   chmod -R 755  "$BUILD_DIR/vendor/sfdx/cli"
+
+  sf version --verbose
 }
 
 install_jq() {
   log "Downloading jq ..."
   mkdir -p "$BUILD_DIR/vendor/sfdx/jq"
   cd "$BUILD_DIR/vendor/sfdx/jq"
-  wget --quiet -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+  wget --quiet -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
   chmod +x jq
+
+  jq --version
 }
 
 setup_dirs() {
@@ -60,6 +64,7 @@ debug "ENV_DIR: $ENV_DIR"
 debug "BP_DIR: $BP_DIR"
 
 setup_dirs
+
 log "Starting CLI installation ..."
 install_sfdx_cli
 
@@ -69,13 +74,15 @@ install_jq
 # Create .profile.d folder
 mkdir -p $BUILD_DIR/.profile.d
 
-# if no .profile.d/path.sh, create one
-if [ ! -f $BUILD_DIR/.profile.d/path.sh ]; then
-  log "Creating path.sh ..."
-  echo "echo \"Updating PATH to include Salesforce CLI ...\"
-export PATH=\$PATH:/app/vendor/sfdx/cli/bin/" > $BUILD_DIR/.profile.d/path.sh
+# if no .profile.d/salesforce_cli_path.sh, create one
+ if [ ! -f $BUILD_DIR/.profile.d/salesforce_cli_path.sh ]; then
+   log "Creating salesforce_cli_path.sh ..."
+   echo "echo \"Updating PATH to include Salesforce CLI and jq ...\"
+export PATH=\$PATH:/app/vendor/sfdx/cli/bin
+export PATH=\$PATH:/app/vendor/sfdx/jq
+" > $BUILD_DIR/.profile.d/salesforce_cli_path.sh
 
-  log "Generated $BUILD_DIR/.profile.d/path.sh to add CLI path"
+   log "Generated $BUILD_DIR/.profile.d/salesforce_cli_path.sh to add CLI path"
 fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
